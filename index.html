@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>D.G.L App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- LOGO -->
+  <div style="text-align:center; margin-bottom: 10px;">
+    <img src="https://primary.jwwb.nl/public/p/l/e/temp-rpbhmtxlqyrsizfthpaq/image-high.png?enable-io=true&amp;enable=upscale&amp;width=290"
+         alt="D.G.L logo" style="max-width: 180px;" />
+  </div>
+
+  <!-- Login -->
+  <section id="login-section">
+    <h1>Log ind</h1>
+    <input type="text" id="username" placeholder="Brugernavn" />
+    <input type="password" id="password" placeholder="Adgangskode" />
+    <button id="login-btn">Log ind</button>
+    <p id="login-error" class="error"></p>
+  </section>
+
+  <!-- Admin panel -->
+  <section id="admin-section" style="display: none;">
+    <h2>Adminpanel</h2>
+    <button id="logout-admin">Log ud</button>
+
+    <h3>Opret/rediger kunde</h3>
+    <input type="text" id="cust-name" placeholder="Kundenavn" />
+    <input type="password" id="cust-pass" placeholder="Kodeord" />
+    <input type="text" id="cust-cvr" placeholder="CVR-nummer" />
+    <input type="email" id="cust-email" placeholder="Email" />
+    <input type="tel" id="cust-phone" placeholder="Telefonnummer" />
+    
+    <label>Leveringsdage:</label>
+    <div id="delivery-days">
+      <label><input type="checkbox" value="1" /> Man</label>
+      <label><input type="checkbox" value="2" /> Tir</label>
+      <label><input type="checkbox" value="3" /> Ons</label>
+      <label><input type="checkbox" value="4" /> Tor</label>
+      <label><input type="checkbox" value="5" /> Fre</label>
+      <label><input type="checkbox" value="6" /> Lør</label>
+      <label><input type="checkbox" value="0" /> Søn</label>
+    </div>
+
+    <label><input type="checkbox" id="cust-allow-sms" /> Må modtage SMS</label>
+    <label><input type="checkbox" id="cust-allow-mail" /> Må modtage e-mail</label>
+
+    <button id="save-customer">Gem kunde</button>
+    <ul id="customer-list"></ul>
+  </section>
+
+  <!-- Kundeside -->
+  <section id="customer-section" style="display: none;">
+    <h2 id="welcome-msg">Velkommen!</h2>
+    <button id="logout-customer">Log ud</button>
+
+    <div id="product-list"></div>
+
+    <h3>Kurv</h3>
+    <ul id="cart"></ul>
+    <textarea id="comment" placeholder="Kommentar til ordre..."></textarea>
+    <button id="confirm-order">Bekræft ordre</button>
+  </section>
+
+  <!-- Popup -->
+  <div id="popup" style="display:none;">
+    <div id="popup-inner">
+      <p id="popup-msg"></p>
+      <button id="popup-close">OK</button>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
