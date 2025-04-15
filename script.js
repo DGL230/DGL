@@ -1,30 +1,41 @@
-const adminUser = "admin";
-const adminPass = "admin";
+// ======= Lagring =======
+function saveToStorage(key, data) {
+  localStorage.setItem(key, JSON.stringify(data));
+}
+function loadFromStorage(key) {
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : [];
+}
 
-let customers = [];
+// ======= Data =======
+let customers = loadFromStorage("customers");
+let products = loadFromStorage("products");
+let orders = loadFromStorage("orders");
 let currentUser = null;
 let cart = [];
 
-const products = [
-  { category: "Salater", items: ["Ruccola", "Iceberg", "Spinat"] },
-  { category: "Krydderurter", items: ["Basilikum", "Timian", "Dild"] },
-  { category: "Tomatvarianter", items: ["Cherrytomat", "Blomme", "Bøf"] }
-];
-
-const orders = [];
-
-const loginSection = document.getElementById("login-section");
-const adminSection = document.getElementById("admin-section");
-const customerSection = document.getElementById("customer-section");
+// ======= DOM =======
 const loginBtn = document.getElementById("login-btn");
 const usernameInput = document.getElementById("username");
 const passwordInput = document.getElementById("password");
 const loginError = document.getElementById("login-error");
+
+const adminSection = document.getElementById("admin-section");
+const customerSection = document.getElementById("customer-section");
+const loginSection = document.getElementById("login-section");
 const logoutAdminBtn = document.getElementById("logout-admin");
 const logoutCustomerBtn = document.getElementById("logout-customer");
 
+const menuToggle = document.getElementById("menuToggle");
+const navMenu = document.getElementById("navMenu");
+
+menuToggle.onclick = () => {
+  navMenu.classList.toggle("show");
+};
+// ========== ADMIN: Kunde-editor ==========
 const custName = document.getElementById("cust-name");
 const custPass = document.getElementById("cust-pass");
+const custAddress = document.getElementById("cust-address");
 const custCVR = document.getElementById("cust-cvr");
 const custEmail = document.getElementById("cust-email");
 const custPhone = document.getElementById("cust-phone");
@@ -34,223 +45,296 @@ const deliveryDays = document.querySelectorAll("#delivery-days input");
 const saveCustomerBtn = document.getElementById("save-customer");
 const customerList = document.getElementById("customer-list");
 
-const welcomeMsg = document.getElementById("welcome-msg");
-const productList = document.getElementById("product-list");
-const cartList = document.getElementById("cart");
-const comment = document.getElementById("comment");
-const confirmOrderBtn = document.getElementById("confirm-order");
-
-const popup = document.getElementById("popup");
-const popupMsg = document.getElementById("popup-msg");
-const popupClose = document.getElementById("popup-close");
-
-function showSection(section) {
-  loginSection.style.display = "none";
-  adminSection.style.display = "none";
-  customerSection.style.display = "none";
-  section.style.display = "block";
-}
-
-function login() {
-  const user = usernameInput.value.trim();
-  const pass = passwordInput.value;
-
-  if (user === adminUser && pass === adminPass) {
-    currentUser = { type: "admin" };
-    showSection(adminSection);
-    renderCustomerList();
-  } else {
-    const cust = customers.find(c => c.name === user && c.password === pass);
-    if (cust) {
-      currentUser = { type: "customer", data: cust };
-      showSection(customerSection);
-      welcomeMsg.innerText = `Velkommen, ${cust.name}`;
-      renderProducts();
-      cart = [];
-      renderCart();
-      scheduleNotification(cust);
-    } else {
-      loginError.innerText = "Forkert brugernavn eller kodeord";
-    }
-  }
-}
-
-function logout() {
-  currentUser = null;
-  usernameInput.value = "";
-  passwordInput.value = "";
-  loginError.innerText = "";
-  showSection(loginSection);
-}
-
-function saveCustomer() {
+saveCustomerBtn.onclick = () => {
   const name = custName.value.trim();
-  const password = custPass.value;
+  const password = custPass.value.trim();
+  const address = custAddress.value.trim();
   const cvr = custCVR.value.trim();
   const email = custEmail.value.trim();
   const phone = custPhone.value.trim();
   const sms = allowSMS.checked;
   const mail = allowMail.checked;
-  const days = Array.from(deliveryDays)
-    .filter(d => d.checked)
-    .map(d => parseInt(d.value));
+  const days = Array.from(deliveryDays).filter(d => d.checked).map(d => parseInt(d.value));
 
-  if (!name || !password) return alert("Udfyld navn og kodeord");
+  if (!name || !password) return alert("Udfyld navn og kode");
 
   const existing = customers.find(c => c.name === name);
   if (existing) {
-    existing.password = password;
-    existing.cvr = cvr;
-    existing.email = email;
-    existing.phone = phone;
-    existing.allowSMS = sms;
-    existing.allowMail = mail;
-    existing.days = days;
-    alert("Kunde opdateret!");
+    Object.assign(existing, { password, address, cvr, email, phone, allowSMS: sms, allowMail: mail, days });
   } else {
-    customers.push({ name, password, cvr, email, phone, allowSMS: sms, allowMail: mail, days });
-    alert("Kunde oprettet!");
+    customers.push({ name, password, address, cvr, email, phone, allowSMS: sms, allowMail: mail, days });
   }
 
-  custName.value = "";
-  custPass.value = "";
-  custCVR.value = "";
-  custEmail.value = "";
-  custPhone.value = "";
-  allowSMS.checked = false;
-  allowMail.checked = false;
-  deliveryDays.forEach(d => (d.checked = false));
-
+  saveToStorage("customers", customers);
   renderCustomerList();
-}
+  alert("Kunde gemt");
+};
 
 function renderCustomerList() {
   customerList.innerHTML = "";
   customers.forEach(c => {
     const li = document.createElement("li");
     li.innerHTML = `
-      <strong>${c.name}</strong><br/>
-      CVR: ${c.cvr || "-"}<br/>
-      Email: ${c.email || "-"}<br/>
-      Tlf: ${c.phone || "-"}<br/>
-      Dage: ${c.days.map(d => ["Søn","Man","Tir","Ons","Tor","Fre","Lør"][d]).join(", ")}<br/>
-      ${c.allowSMS ? `<a href="sms:${c.phone}?body=Husk at bestille dine grøntsager til i morgen!">📲 Send SMS</a><br/>` : ""}
-      ${c.allowMail ? `<a href="mailto:${c.email}?subject=Påmindelse&body=Husk at bestille dine varer til levering i morgen.">📩 Send Mail</a>` : ""}
+      <b>${c.name}</b> – ${c.phone || "Tlf?"} <br/>
+      Adresse: ${c.address || "-"}<br/>
+      Levering: ${c.days.map(d => ["Søn","Man","Tir","Ons","Tor","Fre","Lør"][d]).join(", ")}<br/>
+      ${c.allowSMS ? `<a href="sms:${c.phone}?body=Husk at bestille!">📲</a>` : ""}
+      ${c.allowMail ? `<a href="mailto:${c.email}?subject=Bestilling&body=Husk at bestille!">📩</a>` : ""}
     `;
-    li.onclick = () => fillCustomerForm(c);
+    li.onclick = () => {
+      custName.value = c.name;
+      custPass.value = c.password;
+      custAddress.value = c.address || "";
+      custCVR.value = c.cvr || "";
+      custEmail.value = c.email || "";
+      custPhone.value = c.phone || "";
+      allowSMS.checked = !!c.allowSMS;
+      allowMail.checked = !!c.allowMail;
+      deliveryDays.forEach(d => d.checked = c.days.includes(parseInt(d.value)));
+    };
     customerList.appendChild(li);
   });
 }
 
-function fillCustomerForm(cust) {
-  custName.value = cust.name;
-  custPass.value = cust.password;
-  custCVR.value = cust.cvr || "";
-  custEmail.value = cust.email || "";
-  custPhone.value = cust.phone || "";
-  allowSMS.checked = cust.allowSMS || false;
-  allowMail.checked = cust.allowMail || false;
-  deliveryDays.forEach(d => {
-    d.checked = cust.days.includes(parseInt(d.value));
+// ========== ADMIN: Produkteditor ==========
+const productName = document.getElementById("product-name");
+const productCategory = document.getElementById("product-category");
+const productImage = document.getElementById("product-image");
+const addProductBtn = document.getElementById("add-product");
+const productAdminList = document.getElementById("product-admin-list");
+
+addProductBtn.onclick = () => {
+  const name = productName.value.trim();
+  const category = productCategory.value.trim();
+  const file = productImage.files[0];
+
+  if (!name || !category || !file) return alert("Udfyld alle felter og vælg billede");
+
+  const reader = new FileReader();
+  reader.onload = function (e) {
+    products.push({ name, category, img: e.target.result });
+    saveToStorage("products", products);
+    renderProductAdmin();
+    alert("Produkt tilføjet!");
+    productName.value = "";
+    productCategory.value = "";
+    productImage.value = "";
+  };
+  reader.readAsDataURL(file);
+};
+
+function renderProductAdmin() {
+  productAdminList.innerHTML = "";
+  products.forEach(p => {
+    const li = document.createElement("li");
+    li.innerHTML = `
+      <img src="${p.img}" style="max-width: 80px" /><br/>
+      <b>${p.name}</b> – ${p.category}
+    `;
+    productAdminList.appendChild(li);
   });
 }
+// ========== Kunde: vis produkter ==========
+const productList = document.getElementById("product-list");
 
 function renderProducts() {
   productList.innerHTML = "";
-  products.forEach(cat => {
-    const h3 = document.createElement("h3");
-    h3.innerText = cat.category;
-    productList.appendChild(h3);
-    cat.items.forEach(item => {
+  const categories = [...new Set(products.map(p => p.category))];
+  categories.forEach(cat => {
+    const header = document.createElement("h4");
+    header.innerText = cat;
+    productList.appendChild(header);
+
+    products.filter(p => p.category === cat).forEach(p => {
       const div = document.createElement("div");
       div.className = "product";
-      div.innerText = item;
-      const btn = document.createElement("button");
-      btn.innerText = "Tilføj";
-      btn.onclick = () => addToCart(item);
-      div.appendChild(btn);
+      div.innerHTML = `
+        <img src="${p.img}" alt="${p.name}" />
+        <strong>${p.name}</strong><br/>
+        <button onclick="addToCart('${p.name}')">Tilføj</button>
+      `;
       productList.appendChild(div);
     });
   });
 }
 
-function addToCart(item) {
-  const found = cart.find(p => p.name === item);
+// ========== Kurv ==========
+const cartList = document.getElementById("cart");
+const comment = document.getElementById("comment");
+const confirmOrderBtn = document.getElementById("confirm-order");
+
+function addToCart(name) {
+  const found = cart.find(p => p.name === name);
   if (found) found.qty++;
-  else cart.push({ name: item, qty: 1 });
+  else cart.push({ name, qty: 1 });
   renderCart();
 }
 
 function renderCart() {
   cartList.innerHTML = "";
-  cart.forEach((p, i) => {
+  cart.forEach((item, i) => {
     const li = document.createElement("li");
     li.innerHTML = `
-      ${p.name} x${p.qty}
+      ${item.name} x${item.qty}
       <div class="cart-controls">
-        <button onclick="changeQty(${i}, 1)">+</button>
-        <button onclick="changeQty(${i}, -1)">–</button>
-        <button onclick="removeItem(${i})">❌</button>
+        <button onclick="updateQty(${i}, 1)">+</button>
+        <button onclick="updateQty(${i}, -1)">–</button>
+        <button onclick="removeFromCart(${i})">❌</button>
       </div>
     `;
     cartList.appendChild(li);
   });
 }
 
-function changeQty(index, delta) {
-  cart[index].qty += delta;
+function updateQty(index, change) {
+  cart[index].qty += change;
   if (cart[index].qty <= 0) cart.splice(index, 1);
   renderCart();
 }
 
-function removeItem(index) {
+function removeFromCart(index) {
   cart.splice(index, 1);
   renderCart();
 }
 
-function confirmOrder() {
-  if (cart.length === 0) return alert("Din kurv er tom");
+confirmOrderBtn.onclick = () => {
+  if (cart.length === 0) return alert("Kurven er tom");
   orders.push({
-    by: currentUser.data.name,
-    items: [...cart],
+    by: currentUser.name,
+    items: cart,
     comment: comment.value,
     date: new Date().toLocaleString()
   });
-  showPopup("Tak for din ordre!");
+  saveToStorage("orders", orders);
   cart = [];
   comment.value = "";
   renderCart();
+  showPopup("Tak for din ordre!");
+};
+
+// ========== Kunde: profil ==========
+const myName = document.getElementById("my-name");
+const myPass = document.getElementById("my-pass");
+const myAddress = document.getElementById("my-address");
+const myEmail = document.getElementById("my-email");
+const myPhone = document.getElementById("my-phone");
+const saveProfileBtn = document.getElementById("save-my-profile");
+
+saveProfileBtn.onclick = () => {
+  const me = customers.find(c => c.name === currentUser.name);
+  if (!me) return;
+
+  if (myPass.value.trim()) me.password = myPass.value.trim();
+  me.address = myAddress.value.trim();
+  me.email = myEmail.value.trim();
+  me.phone = myPhone.value.trim();
+
+  saveToStorage("customers", customers);
+  showPopup("Profil opdateret!");
+};
+
+function loadProfile() {
+  const me = customers.find(c => c.name === currentUser.name);
+  if (!me) return;
+  myName.value = me.name;
+  myAddress.value = me.address || "";
+  myEmail.value = me.email || "";
+  myPhone.value = me.phone || "";
+  myPass.value = "";
 }
+// ========== Menu navigation ==========
+document.getElementById("nav-products").onclick = () => switchCustomerView("products");
+document.getElementById("nav-cart").onclick = () => switchCustomerView("cart");
+document.getElementById("nav-profile").onclick = () => {
+  switchCustomerView("profile");
+  loadProfile();
+};
+
+function switchCustomerView(view) {
+  document.querySelectorAll(".page-section").forEach(s => s.style.display = "none");
+  if (view === "products") document.getElementById("customer-products").style.display = "block";
+  if (view === "cart") document.getElementById("customer-cart").style.display = "block";
+  if (view === "profile") document.getElementById("customer-profile").style.display = "block";
+  navMenu.classList.remove("show");
+}
+
+// ========== Login/logout ==========
+loginBtn.onclick = () => {
+  const user = usernameInput.value.trim();
+  const pass = passwordInput.value.trim();
+  loginError.innerText = "";
+
+  if (user === "admin" && pass === "admin") {
+    currentUser = { name: "admin", type: "admin" };
+    showSection("admin");
+    renderCustomerList();
+    renderProductAdmin();
+    return;
+  }
+
+  const found = customers.find(c => c.name === user && c.password === pass);
+  if (found) {
+    currentUser = { ...found, type: "customer" };
+    showSection("customer");
+    document.getElementById("welcome-msg").innerText = `Velkommen, ${found.name}`;
+    renderProducts();
+    renderCart();
+    switchCustomerView("products");
+    checkNotification(found);
+    return;
+  }
+
+  loginError.innerText = "Forkert brugernavn eller kodeord";
+};
+
+logoutAdminBtn.onclick = logoutCustomerBtn.onclick = () => {
+  currentUser = null;
+  cart = [];
+  showSection("login");
+};
+
+function showSection(id) {
+  loginSection.style.display = "none";
+  adminSection.style.display = "none";
+  customerSection.style.display = "none";
+
+  if (id === "admin") adminSection.style.display = "block";
+  if (id === "customer") customerSection.style.display = "block";
+  if (id === "login") loginSection.style.display = "block";
+}
+
+// ========== Påmindelse om levering ==========
+function checkNotification(user) {
+  const now = new Date();
+  const tomorrow = (now.getDay() + 1) % 7;
+  if (!user.days || !user.days.includes(tomorrow)) return;
+
+  const tonight = new Date();
+  tonight.setHours(21, 0, 0, 0);
+
+  const diff = tonight - now;
+  if (diff <= 0) {
+    showPopup("Påmindelse: Du har levering i morgen!");
+  } else {
+    setTimeout(() => {
+      showPopup("Påmindelse: Du har levering i morgen!");
+    }, diff);
+  }
+}
+
+// ========== Popup ==========
+const popup = document.getElementById("popup");
+const popupMsg = document.getElementById("popup-msg");
+const popupClose = document.getElementById("popup-close");
 
 function showPopup(msg) {
   popupMsg.innerText = msg;
   popup.style.display = "flex";
 }
 
-function scheduleNotification(cust) {
-  const now = new Date();
-  const tomorrow = (now.getDay() + 1) % 7;
-  if (!cust.days.includes(tomorrow)) return;
+popupClose.onclick = () => popup.style.display = "none";
 
-  const todayAt21 = new Date();
-  todayAt21.setHours(21, 0, 0, 0);
-  const msUntil21 = todayAt21 - now;
-
-  if (msUntil21 <= 0) {
-    showPopup("Påmindelse: Du har levering i morgen!");
-  } else {
-    setTimeout(() => {
-      showPopup("Påmindelse: Du har levering i morgen!");
-    }, msUntil21);
-  }
-}
-
-// Events
-loginBtn.onclick = login;
-logoutAdminBtn.onclick = logout;
-logoutCustomerBtn.onclick = logout;
-saveCustomerBtn.onclick = saveCustomer;
-confirmOrderBtn.onclick = confirmOrder;
-popupClose.onclick = () => (popup.style.display = "none");
-
-showSection(loginSection);
+// ========== Init ==========
+showSection("login");
+renderCustomerList();
+renderProductAdmin();
