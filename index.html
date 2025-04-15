@@ -3,15 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>D.G.L App</title>
+  <title>D.G.L Pro App</title>
   <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
 </head>
 <body>
-  <!-- LOGO -->
-  <div style="text-align:center; margin-bottom: 10px;">
-    <img src="https://primary.jwwb.nl/public/p/l/e/temp-rpbhmtxlqyrsizfthpaq/image-high.png?enable-io=true&amp;enable=upscale&amp;width=290"
-         alt="D.G.L logo" style="max-width: 180px;" />
-  </div>
+  <!-- Sticky top nav -->
+  <header>
+    <div class="logo">
+      <img src="https://primary.jwwb.nl/public/p/l/e/temp-rpbhmtxlqyrsizfthpaq/image-high.png?enable-io=true&enable=upscale&width=290"
+        alt="D.G.L logo">
+    </div>
+    <div class="menu-toggle" id="menuToggle">☰</div>
+    <nav id="navMenu">
+      <ul>
+        <li><a href="#" id="nav-products">Produkter</a></li>
+        <li><a href="#" id="nav-cart">Kurv</a></li>
+        <li><a href="#" id="nav-profile">Min profil</a></li>
+        <li><a href="#" id="logout-customer" class="logout-btn">Log ud</a></li>
+      </ul>
+    </nav>
+  </header>
 
   <!-- Login -->
   <section id="login-section">
@@ -25,16 +37,17 @@
   <!-- Admin panel -->
   <section id="admin-section" style="display: none;">
     <h2>Adminpanel</h2>
-    <button id="logout-admin">Log ud</button>
+    <button id="logout-admin" class="logout-btn">Log ud</button>
 
     <h3>Opret/rediger kunde</h3>
     <input type="text" id="cust-name" placeholder="Kundenavn" />
     <input type="password" id="cust-pass" placeholder="Kodeord" />
+    <input type="text" id="cust-address" placeholder="Adresse" />
     <input type="text" id="cust-cvr" placeholder="CVR-nummer" />
     <input type="email" id="cust-email" placeholder="Email" />
     <input type="tel" id="cust-phone" placeholder="Telefonnummer" />
-    
-    <label>Leveringsdage:</label>
+    <label><input type="checkbox" id="cust-allow-sms" /> Må modtage SMS</label>
+    <label><input type="checkbox" id="cust-allow-mail" /> Må modtage e-mail</label>
     <div id="delivery-days">
       <label><input type="checkbox" value="1" /> Man</label>
       <label><input type="checkbox" value="2" /> Tir</label>
@@ -44,25 +57,42 @@
       <label><input type="checkbox" value="6" /> Lør</label>
       <label><input type="checkbox" value="0" /> Søn</label>
     </div>
-
-    <label><input type="checkbox" id="cust-allow-sms" /> Må modtage SMS</label>
-    <label><input type="checkbox" id="cust-allow-mail" /> Må modtage e-mail</label>
-
     <button id="save-customer">Gem kunde</button>
     <ul id="customer-list"></ul>
+
+    <h3>Tilføj produkt</h3>
+    <input type="text" id="product-name" placeholder="Produktnavn" />
+    <input type="text" id="product-category" placeholder="Kategori" />
+    <input type="file" id="product-image" accept="image/*" />
+    <button id="add-product">Tilføj produkt</button>
+    <ul id="product-admin-list"></ul>
   </section>
 
   <!-- Kundeside -->
   <section id="customer-section" style="display: none;">
     <h2 id="welcome-msg">Velkommen!</h2>
-    <button id="logout-customer">Log ud</button>
 
-    <div id="product-list"></div>
+    <div id="customer-products" class="page-section">
+      <h3>Produkter</h3>
+      <div id="product-list"></div>
+    </div>
 
-    <h3>Kurv</h3>
-    <ul id="cart"></ul>
-    <textarea id="comment" placeholder="Kommentar til ordre..."></textarea>
-    <button id="confirm-order">Bekræft ordre</button>
+    <div id="customer-cart" class="page-section" style="display: none;">
+      <h3>Kurv</h3>
+      <ul id="cart"></ul>
+      <textarea id="comment" placeholder="Kommentar til ordre..."></textarea>
+      <button id="confirm-order">Bekræft ordre</button>
+    </div>
+
+    <div id="customer-profile" class="page-section" style="display: none;">
+      <h3>Min profil</h3>
+      <input type="text" id="my-name" placeholder="Navn" />
+      <input type="password" id="my-pass" placeholder="Skift kodeord" />
+      <input type="text" id="my-address" placeholder="Adresse" />
+      <input type="email" id="my-email" placeholder="Email" />
+      <input type="tel" id="my-phone" placeholder="Telefon" />
+      <button id="save-my-profile">Gem ændringer</button>
+    </div>
   </section>
 
   <!-- Popup -->
