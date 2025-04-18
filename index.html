@@ -44,22 +44,22 @@
       <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
     </div>
 
-    <!-- Kunder -->
-    <div class="bg-white p-4 rounded shadow mb-6">
-  <h4 class="text-lg font-bold mb-2">Tilføj ny kunde</h4>
-  <input type="text" id="new-cust-name" placeholder="Navn" class="border rounded p-2 w-full mb-2" />
-  <input type="password" id="new-cust-pass" placeholder="Kodeord" class="border rounded p-2 w-full mb-2" />
-  <input type="email" id="new-cust-email" placeholder="Email (valgfrit)" class="border rounded p-2 w-full mb-2" />
-  <input type="tel" id="new-cust-phone" placeholder="Telefon (valgfrit)" class="border rounded p-2 w-full mb-2" />
-  <input type="text" id="new-cust-address" placeholder="Adresse (valgfrit)" class="border rounded p-2 w-full mb-2" />
-  <button onclick="addNewCustomer()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj kunde</button>
+  <!-- Kunder -->
+<div id="admin-customers" class="p-6" style="display:none;">
+  <h3 class="text-xl font-bold mb-4">Kunder</h3>
+  <div class="bg-white p-4 rounded shadow mb-6">
+    <h4 class="text-lg font-bold mb-2">Tilføj ny kunde</h4>
+    <input type="text" id="new-cust-name" placeholder="Navn" class="border rounded p-2 w-full mb-2" />
+    <input type="password" id="new-cust-pass" placeholder="Kodeord" class="border rounded p-2 w-full mb-2" />
+    <input type="email" id="new-cust-email" placeholder="Email (valgfrit)" class="border rounded p-2 w-full mb-2" />
+    <input type="tel" id="new-cust-phone" placeholder="Telefon (valgfrit)" class="border rounded p-2 w-full mb-2" />
+    <input type="text" id="new-cust-address" placeholder="Adresse (valgfrit)" class="border rounded p-2 w-full mb-2" />
+    <button onclick="addNewCustomer()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj kunde</button>
+  </div>
+  <input type="text" id="customer-search" placeholder="Søg efter kunde..." class="border rounded p-2 w-full mb-4" />
+  <div id="customer-list" class="space-y-4"></div>
+  <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
 </div>
-    <div id="admin-customers" class="p-6" style="display:none;">
-      <h3 class="text-xl font-bold mb-4">Kunder</h3>
-      <input type="text" id="customer-search" placeholder="Søg efter kunde..." class="border rounded p-2 w-full mb-4" />
-      <div id="customer-list" class="space-y-4"></div>
-      <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
-    </div>
 
     <!-- Produkter -->
     <div id="admin-products" class="p-6" style="display:none;">
