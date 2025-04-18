@@ -106,26 +106,45 @@
   <script src="script.js"></script>
 </body>
 </html>
-<!-- Admin Kontakt Editor -->
-<div id="admin-contact-editor" style="display: none;">
-  <h3>Rediger kontaktoplysninger</h3>
-  <input type="text" id="contact-name" placeholder="Firmanavn" />
-  <input type="email" id="contact-email" placeholder="Email" />
-  <input type="tel" id="contact-phone" placeholder="Telefonnummer" />
-  <input type="text" id="contact-address" placeholder="Adresse (valgfrit)" />
-  <button id="save-contact">Gem kontaktinfo</button>
-  <button onclick="goToDashboard()">Tilbage</button>
-</div>
+<section id="admin-section" style="display:none;">
+  <div class="admin-header">
+    <h2>D.G.L Adminpanel</h2>
+    <button id="logout-admin" class="logout-btn">Log ud</button>
+  </div>
 
-<!-- Knap i admin dashboard -->
-<button id="admin-goto-contact">Rediger kontaktinfo</button>
+  <!-- Dashboard med 4 bokse -->
+  <div id="admin-dashboard" class="admin-grid">
+    <div class="admin-box" id="admin-goto-orders">1. Ordrer</div>
+    <div class="admin-box" id="admin-goto-customers">2. Kunder</div>
+    <div class="admin-box" id="admin-goto-products">3. Produkter</div>
+    <div class="admin-box" id="admin-goto-contact">4. Kontakt info</div>
+  </div>
 
-<!-- Kontakt-sektion til kunder -->
-<section id="contact-section" style="display: none;">
-  <h2>Kontakt os</h2>
-  <div id="contact-view"></div>
-  <button onclick="showSection('customer')">Tilbage</button>
+  <!-- Ordrer-side -->
+  <div id="admin-orders" style="display:none;">
+    <h3>Ordrer</h3>
+    <div id="order-list"></div>
+    <button onclick="goToDashboard()">Tilbage</button>
+  </div>
+
+  <!-- Kunde-editor -->
+  <div id="admin-customers" style="display:none;">
+    <h3>Kunder</h3>
+    <!-- … dine felter … -->
+    <button onclick="goToDashboard()">Tilbage</button>
+  </div>
+
+  <!-- Produkt-editor -->
+  <div id="admin-products" style="display:none;">
+    <h3>Produkter</h3>
+    <!-- … dine felter … -->
+    <button onclick="goToDashboard()">Tilbage</button>
+  </div>
+
+  <!-- Kontakt-editor -->
+  <div id="admin-contact-editor" style="display:none;">
+    <h3>Rediger kontaktoplysninger</h3>
+    <!-- … dine felter … -->
+    <button onclick="goToDashboard()">Tilbage</button>
+  </div>
 </section>
-
-<!-- Knap i kundemenu (burger-menu) -->
-<li><a href="#" id="nav-contact">Kontakt os</a></li>
