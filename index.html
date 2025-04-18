@@ -44,9 +44,11 @@
       <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
     </div>
 
-  <!-- Kunder -->
+ <!-- Kunder -->
 <div id="admin-customers" class="p-6" style="display:none;">
   <h3 class="text-xl font-bold mb-4">Kunder</h3>
+
+  <!-- Tilføj ny kunde -->
   <div class="bg-white p-4 rounded shadow mb-6">
     <h4 class="text-lg font-bold mb-2">Tilføj ny kunde</h4>
     <input type="text" id="new-cust-name" placeholder="Navn" class="border rounded p-2 w-full mb-2" />
@@ -54,12 +56,44 @@
     <input type="email" id="new-cust-email" placeholder="Email (valgfrit)" class="border rounded p-2 w-full mb-2" />
     <input type="tel" id="new-cust-phone" placeholder="Telefon (valgfrit)" class="border rounded p-2 w-full mb-2" />
     <input type="text" id="new-cust-address" placeholder="Adresse (valgfrit)" class="border rounded p-2 w-full mb-2" />
-    <button onclick="addNewCustomer()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj kunde</button>
+    <button id="add-customer-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj kunde</button>
   </div>
+
+  <!-- Søg og liste -->
   <input type="text" id="customer-search" placeholder="Søg efter kunde..." class="border rounded p-2 w-full mb-4" />
   <div id="customer-list" class="space-y-4"></div>
+
   <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
 </div>
+
+<script>
+  let customers = JSON.parse(localStorage.getItem("customers")) || [];
+
+  function addNewCustomer() {
+    const name = document.getElementById("new-cust-name").value.trim();
+    const pass = document.getElementById("new-cust-pass").value.trim();
+    const email = document.getElementById("new-cust-email").value.trim();
+    const phone = document.getElementById("new-cust-phone").value.trim();
+    const address = document.getElementById("new-cust-address").value.trim();
+
+    if (!name || !pass) return alert("Navn og kodeord er påkrævet");
+
+    const newCustomer = { name, password: pass, email, phone, address };
+    customers.push(newCustomer);
+    localStorage.setItem("customers", JSON.stringify(customers));
+
+    document.getElementById("new-cust-name").value = "";
+    document.getElementById("new-cust-pass").value = "";
+    document.getElementById("new-cust-email").value = "";
+    document.getElementById("new-cust-phone").value = "";
+    document.getElementById("new-cust-address").value = "";
+
+    alert("Kunde tilføjet");
+    renderCustomerList();
+  }
+
+  document.getElementById("add-customer-btn").addEventListener("click", addNewCustomer);
+</script>
 
     <!-- Produkter -->
     <div id="admin-products" class="p-6" style="display:none;">
