@@ -106,3 +106,26 @@
   <script src="script.js"></script>
 </body>
 </html>
+<!-- Admin Kontakt Editor -->
+<div id="admin-contact-editor" style="display: none;">
+  <h3>Rediger kontaktoplysninger</h3>
+  <input type="text" id="contact-name" placeholder="Firmanavn" />
+  <input type="email" id="contact-email" placeholder="Email" />
+  <input type="tel" id="contact-phone" placeholder="Telefonnummer" />
+  <input type="text" id="contact-address" placeholder="Adresse (valgfrit)" />
+  <button id="save-contact">Gem kontaktinfo</button>
+  <button onclick="goToDashboard()">Tilbage</button>
+</div>
+
+<!-- Knap i admin dashboard -->
+<button id="admin-goto-contact">Rediger kontaktinfo</button>
+
+<!-- Kontakt-sektion til kunder -->
+<section id="contact-section" style="display: none;">
+  <h2>Kontakt os</h2>
+  <div id="contact-view"></div>
+  <button onclick="showSection('customer')">Tilbage</button>
+</section>
+
+<!-- Knap i kundemenu (burger-menu) -->
+<li><a href="#" id="nav-contact">Kontakt os</a></li>
