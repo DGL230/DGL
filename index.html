@@ -7,7 +7,6 @@
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 </head>
 <body class="bg-gray-100">
-
   <!-- Logo -->
   <div class="text-center mt-6">
     <img class="mx-auto h-20" src="https://primary.jwwb.nl/public/p/l/e/temp-rpbhmtxlqyrsizfthpaq/image-high.png?enable-io=true&enable=upscale&width=290" alt="DGL Logo">
@@ -23,11 +22,13 @@
   </section>
 
   <!-- ADMINPANEL -->
-  <section id="admin-section" class="hidden">
+  <section id="admin-section" style="display:none;">
     <div class="bg-green-700 text-white flex justify-between items-center px-6 py-3">
       <h2 class="text-xl font-bold">D.G.L Adminpanel</h2>
       <button id="logout-admin" class="bg-red-600 px-4 py-2 rounded">Log ud</button>
     </div>
+
+    <!-- DASHBOARD -->
     <div id="admin-dashboard" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
       <div id="admin-goto-customers" class="admin-box">1. Kunder</div>
       <div id="admin-goto-products" class="admin-box">2. Produkter</div>
@@ -36,8 +37,8 @@
       <div id="admin-goto-admins" class="admin-box">5. Admins</div>
     </div>
 
-    <!-- Kunder -->
-    <div id="admin-customers" class="p-6 hidden">
+    <!-- KUNDER -->
+    <div id="admin-customers" class="p-6" style="display:none;">
       <h3 class="text-xl font-bold mb-4">Kunder</h3>
       <div class="bg-white p-4 rounded shadow mb-6">
         <h4 class="text-lg font-bold mb-2">Tilføj ny kunde</h4>
@@ -50,11 +51,11 @@
       </div>
       <input type="text" id="customer-search" placeholder="Søg kunder..." class="border rounded p-2 w-full mb-4" />
       <div id="customer-list" class="space-y-4"></div>
-      <button onclick="showDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
+      <button class="back-btn mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded w-full">Tilbage</button>
     </div>
 
-    <!-- Produkter -->
-    <div id="admin-products" class="p-6 hidden">
+    <!-- PRODUKTER -->
+    <div id="admin-products" class="p-6" style="display:none;">
       <h3 class="text-xl font-bold mb-4">Produkter</h3>
       <div class="bg-white p-4 rounded shadow mb-6">
         <h4 class="text-lg font-bold mb-2">Tilføj produkt</h4>
@@ -62,42 +63,47 @@
         <button id="add-product-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj produkt</button>
       </div>
       <ul id="product-list" class="space-y-2"></ul>
-      <button onclick="showDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
+      <button class="back-btn mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded w-full">Tilbage</button>
     </div>
 
-    <!-- Ordrer -->
-    <div id="admin-orders" class="p-6 hidden">
+    <!-- ORDRER -->
+    <div id="admin-orders" class="p-6" style="display:none;">
       <h3 class="text-xl font-bold mb-4">Ordrer</h3>
       <div id="order-list" class="space-y-4"></div>
-      <button onclick="showDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
+      <button class="back-btn mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded w-full">Tilbage</button>
     </div>
 
-    <!-- Kontaktinfo -->
-    <div id="admin-contact-editor" class="p-6 hidden">
+    <!-- KONTAKTINFO -->
+    <div id="admin-contact-editor" class="p-6" style="display:none;">
       <h3 class="text-xl font-bold mb-4">Kontaktinfo</h3>
       <input type="text" id="contact-name" placeholder="Firmanavn" class="border rounded p-2 w-full mb-2" />
       <input type="email" id="contact-email" placeholder="Email" class="border rounded p-2 w-full mb-2" />
       <input type="tel" id="contact-phone" placeholder="Telefon" class="border rounded p-2 w-full mb-2" />
       <input type="text" id="contact-address" placeholder="Adresse" class="border rounded p-2 w-full mb-2" />
       <button id="save-contact" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Gem kontaktinfo</button>
-      <button onclick="showDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
+      <button class="back-btn mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded w-full">Tilbage</button>
     </div>
 
-    <!-- Admins -->
-    <div id="admin-manage-admins" class="p-6 hidden">
+    <!-- ADMINS -->
+    <div id="admin-manage-admins" class="p-6" style="display:none;">
       <h3 class="text-xl font-bold mb-4">Admins</h3>
       <input type="text" id="new-admin-username" placeholder="Brugernavn" class="border rounded p-2 w-full mb-2" />
       <input type="password" id="new-admin-password" placeholder="Kodeord" class="border rounded p-2 w-full mb-2" />
       <button id="add-admin-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj admin</button>
       <ul id="admin-list" class="space-y-2 mt-4"></ul>
-      <button onclick="showDashboard()" class="mt-6 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded w-full">Tilbage</button>
+      <button class="back-btn mt-6 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded w-full">Tilbage</button>
     </div>
   </section>
 
   <script src="script.js"></script>
+  <script>
+    // Back buttons
+    document.querySelectorAll('.back-btn').forEach(btn => {
+      btn.addEventListener('click', () => showOnlyAdminSection('admin-dashboard'));
+    });
+  </script>
   <style>
     .admin-box { @apply bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50; }
-    .hidden { display: none; }
   </style>
 </body>
 </html>
