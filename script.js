@@ -338,3 +338,61 @@ popupClose.onclick = () => popup.style.display = "none";
 showSection("login");
 renderCustomerList();
 renderProductAdmin();
+// ====== Kontakt Info System ======
+const contactName = document.getElementById("contact-name");
+const contactEmail = document.getElementById("contact-email");
+const contactPhone = document.getElementById("contact-phone");
+const contactAddress = document.getElementById("contact-address");
+const saveContactBtn = document.getElementById("save-contact");
+const contactView = document.getElementById("contact-view");
+
+// Gem kontaktinfo
+saveContactBtn.onclick = () => {
+  const info = {
+    name: contactName.value.trim(),
+    email: contactEmail.value.trim(),
+    phone: contactPhone.value.trim(),
+    address: contactAddress.value.trim()
+  };
+  localStorage.setItem("contactInfo", JSON.stringify(info));
+  alert("Kontaktinfo gemt!");
+  goToDashboard();
+};
+
+// Indlæs i admin
+function loadContactEditor() {
+  const info = JSON.parse(localStorage.getItem("contactInfo")) || {};
+  contactName.value = info.name || "";
+  contactEmail.value = info.email || "";
+  contactPhone.value = info.phone || "";
+  contactAddress.value = info.address || "";
+}
+
+// Vis til kunde
+function renderContactView() {
+  const info = JSON.parse(localStorage.getItem("contactInfo")) || {};
+  contactView.innerHTML = `
+    <p><strong>${info.name || "Firmanavn ikke angivet"}</strong></p>
+    <p>📞 <a href="tel:${info.phone || ''}">${info.phone || "Telefon ikke angivet"}</a></p>
+    <p>📩 <a href="mailto:${info.email || ''}">${info.email || "Email ikke angivet"}</a></p>
+    ${info.address ? `<p>📍 ${info.address}</p>` : ""}
+  `;
+}
+
+// Navigationsknapper
+document.getElementById("admin-goto-contact").onclick = () => {
+  showOnlyAdminSection("admin-contact-editor");
+  loadContactEditor();
+};
+
+document.getElementById("nav-contact").onclick = () => {
+  renderContactView();
+  showSection("contact");
+};
+
+// Helper
+function showOnlyAdminSection(id) {
+  ["admin-dashboard", "admin-customers", "admin-products", "admin-orders", "admin-contact-editor"]
+    .forEach(sec => document.getElementById(sec).style.display = "none");
+  document.getElementById(id).style.display = "block";
+}
