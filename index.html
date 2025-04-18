@@ -14,7 +14,7 @@
   </div>
 
   <!-- LOGIN SECTION -->
-  <section id="login-section" style="display: block;" class="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow">
+  <section id="login-section" class="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow">
     <h1 class="text-2xl font-bold text-green-700 text-center mb-4">Log ind</h1>
     <input type="text" id="username" placeholder="Brugernavn" class="border rounded p-2 w-full mb-3" />
     <input type="password" id="password" placeholder="Adgangskode" class="border rounded p-2 w-full mb-3" />
@@ -22,16 +22,75 @@
     <p id="login-error" class="text-red-600 text-center mt-2"></p>
   </section>
 
+  <!-- ADMIN DASHBOARD -->
+  <section id="admin-dashboard" class="hidden max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
+    <h2 class="text-xl font-bold text-green-700 mb-4">Admin Dashboard</h2>
+
+    <div class="mb-4">
+      <h3 class="font-bold">Tilføj Kunde</h3>
+      <input type="text" id="new-customer" placeholder="Kundenavn" class="border rounded p-2 w-full mb-2" />
+      <button id="add-customer-btn" class="bg-blue-600 text-white px-4 py-2 rounded">Tilføj Kunde</button>
+    </div>
+
+    <div class="mb-4">
+      <h3 class="font-bold">Kunder</h3>
+      <ul id="customer-list" class="border rounded p-4 bg-gray-50"></ul>
+    </div>
+
+    <button id="logout-btn" class="bg-red-600 text-white px-4 py-2 rounded">Log ud</button>
+  </section>
+
   <script>
+    // Check initial data
+    const customers = JSON.parse(localStorage.getItem("customers")) || [];
+
+    // Login Function
     document.getElementById("login-btn").onclick = () => {
       const username = document.getElementById("username").value;
       const password = document.getElementById("password").value;
       if (username === "admin" && password === "admin") {
-        alert("Logget ind som admin!");
+        document.getElementById("login-section").classList.add("hidden");
+        document.getElementById("admin-dashboard").classList.remove("hidden");
+        renderCustomerList();
       } else {
         document.getElementById("login-error").textContent = "Forkert brugernavn eller adgangskode";
       }
     };
+
+    // Logout Function
+    document.getElementById("logout-btn").onclick = () => {
+      document.getElementById("login-section").classList.remove("hidden");
+      document.getElementById("admin-dashboard").classList.add("hidden");
+    };
+
+    // Add Customer
+    document.getElementById("add-customer-btn").onclick = () => {
+      const customerName = document.getElementById("new-customer").value;
+      if (customerName) {
+        customers.push(customerName);
+        localStorage.setItem("customers", JSON.stringify(customers));
+        renderCustomerList();
+        document.getElementById("new-customer").value = "";
+      }
+    };
+
+    // Render Customer List
+    function renderCustomerList() {
+      const list = document.getElementById("customer-list");
+      list.innerHTML = customers.map((customer, index) => `
+        <li class="flex justify-between mb-2">
+          ${customer}
+          <button onclick="deleteCustomer(${index})" class="text-red-600">Slet</button>
+        </li>
+      `).join('');
+    }
+
+    // Delete Customer
+    function deleteCustomer(index) {
+      customers.splice(index, 1);
+      localStorage.setItem("customers", JSON.stringify(customers));
+      renderCustomerList();
+    }
   </script>
 </body>
 </html>
