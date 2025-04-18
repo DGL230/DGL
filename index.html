@@ -26,24 +26,18 @@
   <section id="admin-dashboard" class="hidden max-w-4xl mx-auto mt-10 bg-white p-6 rounded shadow">
     <h2 class="text-xl font-bold text-green-700 mb-4">Admin Dashboard</h2>
 
-    <div class="mb-4">
-      <h3 class="font-bold">Tilføj Kunde</h3>
-      <input type="text" id="new-customer" placeholder="Kundenavn" class="border rounded p-2 w-full mb-2" />
-      <button id="add-customer-btn" class="bg-blue-600 text-white px-4 py-2 rounded">Tilføj Kunde</button>
+    <div class="grid grid-cols-2 gap-4">
+      <button class="bg-blue-600 text-white px-4 py-2 rounded">Kunder</button>
+      <button class="bg-blue-600 text-white px-4 py-2 rounded">Produkter</button>
+      <button class="bg-blue-600 text-white px-4 py-2 rounded">Ordrer</button>
+      <button class="bg-blue-600 text-white px-4 py-2 rounded">Kontaktinfo</button>
+      <button class="bg-blue-600 text-white px-4 py-2 rounded">Admins</button>
     </div>
 
-    <div class="mb-4">
-      <h3 class="font-bold">Kunder</h3>
-      <ul id="customer-list" class="border rounded p-4 bg-gray-50"></ul>
-    </div>
-
-    <button id="logout-btn" class="bg-red-600 text-white px-4 py-2 rounded">Log ud</button>
+    <button id="logout-btn" class="bg-red-600 text-white px-4 py-2 rounded mt-4">Log ud</button>
   </section>
 
   <script>
-    // Check initial data
-    const customers = JSON.parse(localStorage.getItem("customers")) || [];
-
     // Login Function
     document.getElementById("login-btn").onclick = () => {
       const username = document.getElementById("username").value;
@@ -51,7 +45,6 @@
       if (username === "admin" && password === "admin") {
         document.getElementById("login-section").classList.add("hidden");
         document.getElementById("admin-dashboard").classList.remove("hidden");
-        renderCustomerList();
       } else {
         document.getElementById("login-error").textContent = "Forkert brugernavn eller adgangskode";
       }
@@ -62,35 +55,6 @@
       document.getElementById("login-section").classList.remove("hidden");
       document.getElementById("admin-dashboard").classList.add("hidden");
     };
-
-    // Add Customer
-    document.getElementById("add-customer-btn").onclick = () => {
-      const customerName = document.getElementById("new-customer").value;
-      if (customerName) {
-        customers.push(customerName);
-        localStorage.setItem("customers", JSON.stringify(customers));
-        renderCustomerList();
-        document.getElementById("new-customer").value = "";
-      }
-    };
-
-    // Render Customer List
-    function renderCustomerList() {
-      const list = document.getElementById("customer-list");
-      list.innerHTML = customers.map((customer, index) => `
-        <li class="flex justify-between mb-2">
-          ${customer}
-          <button onclick="deleteCustomer(${index})" class="text-red-600">Slet</button>
-        </li>
-      `).join('');
-    }
-
-    // Delete Customer
-    function deleteCustomer(index) {
-      customers.splice(index, 1);
-      localStorage.setItem("customers", JSON.stringify(customers));
-      renderCustomerList();
-    }
   </script>
 </body>
 </html>
