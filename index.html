@@ -6,14 +6,15 @@
   <title>D.G.L Admin App</title>
   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
 </head>
-<body class="bg-gray-100 text-gray-800">
+<body class="bg-gray-100">
+
   <!-- Logo -->
   <div class="text-center mt-6">
-    <img class="mx-auto h-20" src="https://primary.jwwb.nl/public/p/l/e/temp-rpbhmtxlqyrsizfthpaq/image-high.png?width=290" alt="DGL Logo">
+    <img class="mx-auto h-20" src="https://primary.jwwb.nl/public/p/l/e/temp-rpbhmtxlqyrsizfthpaq/image-high.png?enable-io=true&enable=upscale&width=290" alt="DGL Logo">
   </div>
 
-  <!-- Login Section -->
-  <section id="login-section" class="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow">
+  <!-- LOGIN SECTION -->
+  <section id="login-section" style="display: block;" class="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow">
     <h1 class="text-2xl font-bold text-green-700 text-center mb-4">Log ind</h1>
     <input type="text" id="username" placeholder="Brugernavn" class="border rounded p-2 w-full mb-3" />
     <input type="password" id="password" placeholder="Adgangskode" class="border rounded p-2 w-full mb-3" />
@@ -21,216 +22,16 @@
     <p id="login-error" class="text-red-600 text-center mt-2"></p>
   </section>
 
-  <!-- Admin Panel -->
-  <section id="admin-section" class="hidden">
-    <!-- Header -->
-    <div class="bg-green-700 text-white flex justify-between items-center px-6 py-3">
-      <h2 class="text-xl font-bold">D.G.L Adminpanel</h2>
-      <button id="logout-btn" class="bg-red-600 px-4 py-2 rounded">Log ud</button>
-    </div>
-
-    <!-- Dashboard -->
-    <div id="dashboard" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
-      <div id="btn-customers" class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50">Kunder</div>
-      <div id="btn-products" class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50">Produkter</div>
-      <div id="btn-orders" class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50">Ordrer</div>
-      <div id="btn-contact" class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50">Kontaktinfo</div>
-      <div id="btn-admins" class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50">Admins</div>
-    </div>
-
-    <!-- Customers Section -->
-    <div id="section-customers" class="p-6 hidden">
-      <h3 class="text-xl font-bold mb-4">Kunder</h3>
-      <!-- Add Customer Form -->
-      <div class="bg-white p-4 rounded shadow mb-6">
-        <h4 class="text-lg font-bold mb-2">Tilføj ny kunde</h4>
-        <input type="text" id="new-cust-name" placeholder="Brugernavn" class="border rounded p-2 w-full mb-2" />
-        <input type="password" id="new-cust-pass" placeholder="Kodeord" class="border rounded p-2 w-full mb-2" />
-        <button id="add-customer-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj kunde</button>
-      </div>
-      <!-- Search & List -->
-      <input type="text" id="customer-search" placeholder="Søg kunder..." class="border rounded p-2 w-full mb-4" />
-      <div id="customer-list" class="space-y-4"></div>
-      <button class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded back-btn">Tilbage</button>
-    </div>
-
-    <!-- Products Section -->
-    <div id="section-products" class="p-6 hidden">
-      <h3 class="text-xl font-bold mb-4">Produkter</h3>
-      <div class="bg-white p-4 rounded shadow mb-6">
-        <h4 class="text-lg font-bold mb-2">Tilføj produkt</h4>
-        <input type="text" id="new-prod-name" placeholder="Produktnavn" class="border rounded p-2 w-full mb-2" />
-        <button id="add-product-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj produkt</button>
-      </div>
-      <ul id="product-list" class="space-y-2"></ul>
-      <button class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded back-btn">Tilbage</button>
-    </div>
-
-    <!-- Orders Section -->
-    <div id="section-orders" class="p-6 hidden">
-      <h3 class="text-xl font-bold mb-4">Ordrer</h3>
-      <div id="order-list" class="space-y-4"></div>
-      <button class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded back-btn">Tilbage</button>
-    </div>
-
-    <!-- Contact Section -->
-    <div id="section-contact" class="p-6 hidden">
-      <h3 class="text-xl font-bold mb-4">Kontaktinfo</h3>
-      <input type="text" id="contact-name" placeholder="Firmanavn" class="border rounded p-2 w-full mb-2" />
-      <input type="email" id="contact-email" placeholder="Email" class="border rounded p-2 w-full mb-2" />
-      <input type="tel" id="contact-phone" placeholder="Telefon" class="border rounded p-2 w-full mb-2" />
-      <input type="text" id="contact-address" placeholder="Adresse" class="border rounded p-2 w-full mb-2" />
-      <button id="save-contact" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Gem kontaktinfo</button>
-      <button class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded back-btn">Tilbage</button>
-    </div>
-
-    <!-- Admins Section -->
-    <div id="section-admins" class="p-6 hidden">
-      <h3 class="text-xl font-bold mb-4">Admins</h3>
-      <input type="text" id="new-admin-name" placeholder="Brugernavn" class="border rounded p-2 w-full mb-2" />
-      <input type="password" id="new-admin-pass" placeholder="Kodeord" class="border rounded p-2 w-full mb-2" />
-      <button id="add-admin-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj admin</button>
-      <ul id="admin-list" class="space-y-2 mt-4"></ul>
-      <button class="mt-6 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded back-btn">Tilbage</button>
-    </div>
-  </section>
-
-  <!-- Inline Script -->
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      // Data
-      const admins = JSON.parse(localStorage.getItem('admins')) || [{ username:'admin', password:'admin' }];
-      const customers = JSON.parse(localStorage.getItem('customers')) || [];
-      const products = JSON.parse(localStorage.getItem('products')) || [];
-      const orders = JSON.parse(localStorage.getItem('orders')) || [];
-      let contactInfo = JSON.parse(localStorage.getItem('contactInfo')) || {};
-
-      // Sections
-      const loginSec = document.getElementById('login-section');
-      const adminSec = document.getElementById('admin-section');
-      const dashboard = document.getElementById('dashboard');
-
-      // Buttons
-      document.getElementById('login-btn').onclick = login;
-      document.getElementById('logout-btn').onclick = () => showSection('login');
-
-      document.getElementById('btn-customers').onclick = () => showSection('customers');
-      document.getElementById('btn-products').onclick = () => showSection('products');
-      document.getElementById('btn-orders').onclick = () => showSection('orders');
-      document.getElementById('btn-contact').onclick = () => showSection('contact');
-      document.getElementById('btn-admins').onclick = () => showSection('admins');
-
-      document.querySelectorAll('.back-btn').forEach(btn => btn.addEventListener('click', () => showSection('dashboard')));
-
-      // Add actions
-      document.getElementById('add-customer-btn').onclick = addCustomer;
-      document.getElementById('customer-search').oninput = () => renderCustomerList();
-      document.getElementById('add-product-btn').onclick = addProduct;
-      document.getElementById('add-admin-btn').onclick = addAdmin;
-      document.getElementById('save-contact').onclick = saveContact;
-
-      // Login
-      function login() {
-        const user = document.getElementById('username').value.trim();
-        const pass = document.getElementById('password').value.trim();
-        if (admins.find(a=>a.username===user && a.password===pass)) {
-          showSection('dashboard');
-        } else if (customers.find(c=>c.username===user && c.password===pass)) {
-          alert('Kunde-login ikke implementeret her');
-        } else {
-          document.getElementById('login-error').innerText = 'Forkert login';
-        }
+    document.getElementById("login-btn").onclick = () => {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      if (username === "admin" && password === "admin") {
+        alert("Logget ind som admin!");
+      } else {
+        document.getElementById("login-error").textContent = "Forkert brugernavn eller adgangskode";
       }
-
-      // Navigation helper
-      function showSection(name) {
-        loginSec.style.display = name==='login'? 'block':'none';
-        adminSec.style.display = name==='login'? 'none':'block';
-        document.getElementById('dashboard').style.display = name==='dashboard'? 'grid':'none';
-        document.getElementById('section-customers').style.display = name==='customers'? 'block':'none';
-        document.getElementById('section-products').style.display = name==='products'? 'block':'none';
-        document.getElementById('section-orders').style.display = name==='orders'? 'block':'none';
-        document.getElementById('section-contact').style.display = name==='contact'? 'block':'none';
-        document.getElementById('section-admins').style.display = name==='admins'? 'block':'none';
-      }
-
-      // Customers
-      function renderCustomerList() {
-        const list = document.getElementById('customer-list'); list.innerHTML='';
-        const filter = document.getElementById('customer-search').value.toLowerCase();
-        customers.filter(c=>c.username.toLowerCase().includes(filter))
-          .forEach((c,i)=>{
-            const div = document.createElement('div'); div.className='bg-white p-4 rounded shadow mb-2';
-            div.innerHTML = `<strong>${c.username}</strong> <button onclick="deleteCustomer(${i})" class='text-red-600'>Slet</button>`;
-            list.appendChild(div);
-          });
-      }
-      function addCustomer() {
-        const u = document.getElementById('new-cust-name').value.trim();
-        const p = document.getElementById('new-cust-pass').value.trim();
-        if(!u||!p) return alert('Brugernavn og kodeord kræves');
-        customers.push({username:u,password:p});
-        localStorage.setItem('customers',JSON.stringify(customers));
-        document.getElementById('new-cust-name').value=''; document.getElementById('new-cust-pass').value='';
-        renderCustomerList();
-      }
-      window.deleteCustomer = i=>{ customers.splice(i,1); localStorage.setItem('customers',JSON.stringify(customers)); renderCustomerList(); };
-
-      // Products
-      function renderProductList() {
-        const ul=document.getElementById('product-list'); ul.innerHTML='';
-        products.forEach((p,i)=>{
-          const li=document.createElement('li'); li.className='bg-white p-2 rounded shadow mb-2 flex justify-between';
-          li.innerHTML = `${p} <button onclick="deleteProduct(${i})" class='text-red-600'>Slet</button>`;
-          ul.appendChild(li);
-        });
-      }
-      function addProduct() {
-        const n=document.getElementById('new-prod-name').value.trim(); if(!n) return alert('Produktnavn kræves');
-        products.push(n); localStorage.setItem('products',JSON.stringify(products)); document.getElementById('new-prod-name').value=''; renderProductList();
-      }
-      window.deleteProduct = i=>{ products.splice(i,1); localStorage.setItem('products',JSON.stringify(products)); renderProductList(); };
-
-      // Orders
-      function renderOrderList() {
-        const ol=document.getElementById('order-list'); ol.innerHTML='';
-        orders.sort((a,b)=>new Date(b.dato)-new Date(a.dato)).forEach(o=>{
-          const d=document.createElement('div'); d.className='bg-white p-4 rounded shadow mb-2';
-          d.innerHTML = `<p>Kunde: ${o.kunde}</p><p>Dato: ${o.dato}</p><p>Status: ${o.status}</p>`;
-          ol.appendChild(d);
-        });
-      }
-      renderCustomerList(); renderProductList(); renderOrderList();
-
-      // Contact
-      function loadContact() {
-        document.getElementById('contact-name').value=contactInfo.name||'';
-        document.getElementById('contact-email').value=contactInfo.email||'';
-      }
-      function saveContact() {
-        contactInfo = { name:document.getElementById('contact-name').value, email:document.getElementById('contact-email').value };
-        localStorage.setItem('contactInfo',JSON.stringify(contactInfo)); alert('Kontaktinfo gemt');
-      }
-      document.getElementById('save-contact').onclick = saveContact;
-
-      // Admins
-      function renderAdminList() {
-        const al=document.getElementById('admin-list'); al.innerHTML='';
-        admins.forEach((a,i)=>{
-          const li=document.createElement('li'); li.className='bg-white p-2 rounded shadow mb-2 flex justify-between';
-          li.innerHTML=`${a.username} ${a.username!=='admin'?`<button onclick="deleteAdmin(${i})" class='text-red-600'>Slet</button>`:''}`;
-          al.appendChild(li);
-        });
-      }
-      document.getElementById('add-admin-btn').onclick = ()=>{
-        const u=document.getElementById('new-admin-name').value.trim(); const p=document.getElementById('new-admin-pass').value.trim();
-        if(!u||!p) return alert('felter kræves'); admins.push({username:u,password:p}); localStorage.setItem('admins',JSON.stringify(admins)); document.getElementById('new-admin-name').value=''; document.getElementById('new-admin-pass').value=''; renderAdminList();
-      };
-      window.deleteAdmin = i=>{ admins.splice(i,1); localStorage.setItem('admins',JSON.stringify(admins)); renderAdminList(); };
-      renderAdminList();
-
-    });
+    };
   </script>
-
 </body>
 </html>
