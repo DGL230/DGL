@@ -21,14 +21,13 @@
     <p id="login-error" class="text-red-600 text-center mt-2"></p>
   </section>
 
-  <!-- Admin Sektion -->
+  <!-- Adminpanel -->
   <section id="admin-section" style="display: none;">
     <div class="bg-green-700 text-white flex justify-between items-center px-6 py-3">
       <h2 class="text-xl font-bold">D.G.L Adminpanel</h2>
       <button id="logout-admin" class="bg-red-600 px-4 py-2 rounded">Log ud</button>
     </div>
 
-    <!-- Dashboard: 5 bokse i grid -->
     <div id="admin-dashboard" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
       <div class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50" id="admin-goto-orders">1. Ordrer</div>
       <div class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50" id="admin-goto-customers">2. Kunder</div>
@@ -37,144 +36,22 @@
       <div class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50" id="admin-goto-admins">5. Admins</div>
     </div>
 
-    <!-- Ordrer -->
-    <div id="admin-orders" class="p-6" style="display:none;">
-      <h3 class="text-xl font-bold mb-4">Ordrer</h3>
-      <div id="order-list"></div>
+    <!-- Kunder -->
+    <div id="admin-customers" class="p-6" style="display:none;">
+      <h3 class="text-xl font-bold mb-4">Kunder</h3>
+      <div class="bg-white p-4 rounded shadow mb-6">
+        <h4 class="text-lg font-bold mb-2">Tilføj ny kunde</h4>
+        <input type="text" id="new-cust-name" placeholder="Navn" class="border rounded p-2 w-full mb-2" />
+        <input type="password" id="new-cust-pass" placeholder="Kodeord" class="border rounded p-2 w-full mb-2" />
+        <input type="email" id="new-cust-email" placeholder="Email (valgfrit)" class="border rounded p-2 w-full mb-2" />
+        <input type="tel" id="new-cust-phone" placeholder="Telefon (valgfrit)" class="border rounded p-2 w-full mb-2" />
+        <input type="text" id="new-cust-address" placeholder="Adresse (valgfrit)" class="border rounded p-2 w-full mb-2" />
+        <button id="add-customer-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj kunde</button>
+      </div>
+
+      <input type="text" id="customer-search" placeholder="Søg efter kunde..." class="border rounded p-2 w-full mb-4" />
+      <div id="customer-list" class="space-y-4"></div>
       <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
-    </div>
-
-<!-- Kunder -->
-<div id="admin-customers" class="p-6" style="display:none;">
-  <h3 class="text-xl font-bold mb-4">Kunder</h3>
-
-  <!-- Tilføj ny kunde -->
-  <div class="bg-white p-4 rounded shadow mb-6">
-    <h4 class="text-lg font-bold mb-2">Tilføj ny kunde</h4>
-    <input type="text" id="new-cust-name" placeholder="Navn" class="border rounded p-2 w-full mb-2" />
-    <input type="password" id="new-cust-pass" placeholder="Kodeord" class="border rounded p-2 w-full mb-2" />
-    <input type="email" id="new-cust-email" placeholder="Email (valgfrit)" class="border rounded p-2 w-full mb-2" />
-    <input type="tel" id="new-cust-phone" placeholder="Telefon (valgfrit)" class="border rounded p-2 w-full mb-2" />
-    <input type="text" id="new-cust-address" placeholder="Adresse (valgfrit)" class="border rounded p-2 w-full mb-2" />
-    <button id="add-customer-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj kunde</button>
-  </div>
-
-  <!-- Søg og liste -->
-  <input type="text" id="customer-search" placeholder="Søg efter kunde..." class="border rounded p-2 w-full mb-4" />
-  <div id="customer-list" class="space-y-4"></div>
-
-  <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
-</div>
-
-<script>
-  let customers = JSON.parse(localStorage.getItem("customers")) || [];
-
-  function addNewCustomer() {
-    const name = document.getElementById("new-cust-name").value.trim();
-    const pass = document.getElementById("new-cust-pass").value.trim();
-    const email = document.getElementById("new-cust-email").value.trim();
-    const phone = document.getElementById("new-cust-phone").value.trim();
-    const address = document.getElementById("new-cust-address").value.trim();
-
-    if (!name || !pass) return alert("Navn og kodeord er påkrævet");
-
-    const newCustomer = { name, password: pass, email, phone, address };
-    customers.push(newCustomer);
-    localStorage.setItem("customers", JSON.stringify(customers));
-
-    document.getElementById("new-cust-name").value = "";
-    document.getElementById("new-cust-pass").value = "";
-    document.getElementById("new-cust-email").value = "";
-    document.getElementById("new-cust-phone").value = "";
-    document.getElementById("new-cust-address").value = "";
-
-    alert("Kunde tilføjet");
-    renderCustomerList();
-  }
-
-  function renderCustomerList(filter = "") {
-    const container = document.getElementById("customer-list");
-    container.innerHTML = "";
-
-    const filtered = customers.filter(c =>
-      c.name.toLowerCase().includes(filter.toLowerCase())
-    );
-
-    if (filtered.length === 0) {
-      container.innerHTML = "<p class='text-center text-gray-500'>Ingen kunder fundet</p>";
-      return;
-    }
-
-    filtered.forEach((cust, index) => {
-      const div = document.createElement("div");
-      div.className = "bg-white shadow p-4 rounded border";
-      div.innerHTML = `
-        <input type="text" value="${cust.name}" class="cust-name border p-1 rounded w-full mb-2" />
-        <input type="text" value="${cust.address || ''}" class="cust-address border p-1 rounded w-full mb-2" />
-        <input type="email" value="${cust.email || ''}" class="cust-email border p-1 rounded w-full mb-2" />
-        <input type="tel" value="${cust.phone || ''}" class="cust-phone border p-1 rounded w-full mb-2" />
-        <input type="password" placeholder="Skift kodeord" class="cust-pass border p-1 rounded w-full mb-2" />
-        <div class="flex gap-2 mt-2">
-          <button class="save-btn bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">Gem</button>
-          <button class="delete-btn bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">Slet</button>
-        </div>
-      `;
-
-      div.querySelector(".save-btn").onclick = () => {
-        cust.name = div.querySelector(".cust-name").value.trim();
-        cust.address = div.querySelector(".cust-address").value.trim();
-        cust.email = div.querySelector(".cust-email").value.trim();
-        cust.phone = div.querySelector(".cust-phone").value.trim();
-        const newPass = div.querySelector(".cust-pass").value.trim();
-        if (newPass) cust.password = newPass;
-        localStorage.setItem("customers", JSON.stringify(customers));
-        alert("Kunde opdateret");
-      };
-
-      div.querySelector(".delete-btn").onclick = () => {
-        if (confirm("Er du sikker på at du vil slette denne kunde?")) {
-          customers.splice(index, 1);
-          localStorage.setItem("customers", JSON.stringify(customers));
-          renderCustomerList();
-        }
-      };
-
-      container.appendChild(div);
-    });
-  }
-
-  document.getElementById("add-customer-btn").addEventListener("click", addNewCustomer);
-  document.getElementById("customer-search").addEventListener("input", e => {
-    renderCustomerList(e.target.value);
-  });
-</script>
-
-    <!-- Produkter -->
-    <div id="admin-products" class="p-6" style="display:none;">
-      <h3 class="text-xl font-bold mb-4">Produkter</h3>
-      <div id="product-admin-list"></div>
-      <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
-    </div>
-
-    <!-- Kontaktinfo -->
-    <div id="admin-contact-editor" class="p-6" style="display:none;">
-      <h3 class="text-xl font-bold mb-4">Kontakt Info</h3>
-      <input type="text" id="contact-name" placeholder="Firmanavn" class="border rounded p-2 w-full mb-3" />
-      <input type="email" id="contact-email" placeholder="Email" class="border rounded p-2 w-full mb-3" />
-      <input type="tel" id="contact-phone" placeholder="Telefonnummer" class="border rounded p-2 w-full mb-3" />
-      <input type="text" id="contact-address" placeholder="Adresse (valgfrit)" class="border rounded p-2 w-full mb-3" />
-      <button id="save-contact" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Gem kontaktinfo</button>
-      <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded w-full">Tilbage</button>
-    </div>
-
-    <!-- Admins -->
-    <div id="admin-manage-admins" class="p-6" style="display:none;">
-      <h3 class="text-xl font-bold mb-4">Admins</h3>
-      <input type="text" id="new-admin-username" placeholder="Nyt admin brugernavn" class="border rounded p-2 w-full mb-3" />
-      <input type="password" id="new-admin-password" placeholder="Kodeord" class="border rounded p-2 w-full mb-3" />
-      <button id="add-admin-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj admin</button>
-      <ul id="admin-list" class="mt-4 space-y-2"></ul>
-      <button onclick="goToDashboard()" class="mt-6 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded w-full">Tilbage</button>
     </div>
   </section>
 
