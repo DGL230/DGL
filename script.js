@@ -68,8 +68,8 @@ function saveCustomerInfo(username) {
 }
 
 // === OPRET KUNDE (retter name -> username) ===
-if (document.getElementById("add-customer-btn")) {
-  document.getElementById("add-customer-btn").onclick = () => {
+document.addEventListener("click", function(e) {
+  if (e.target && e.target.id === "add-customer-btn") {
     const username = document.getElementById("new-cust-name").value.trim();
     const pass = document.getElementById("new-cust-pass").value.trim();
     const email = document.getElementById("new-cust-email").value.trim();
@@ -87,6 +87,11 @@ if (document.getElementById("add-customer-btn")) {
     document.getElementById("new-cust-email").value = "";
     document.getElementById("new-cust-phone").value = "";
     document.getElementById("new-cust-address").value = "";
+
+    alert("Kunde tilføjet");
+  }
+});
+
 
     alert("Kunde tilføjet");
   };
