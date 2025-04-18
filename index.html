@@ -44,7 +44,7 @@
       <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
     </div>
 
- <!-- Kunder -->
+<!-- Kunder -->
 <div id="admin-customers" class="p-6" style="display:none;">
   <h3 class="text-xl font-bold mb-4">Kunder</h3>
 
@@ -92,7 +92,61 @@
     renderCustomerList();
   }
 
+  function renderCustomerList(filter = "") {
+    const container = document.getElementById("customer-list");
+    container.innerHTML = "";
+
+    const filtered = customers.filter(c =>
+      c.name.toLowerCase().includes(filter.toLowerCase())
+    );
+
+    if (filtered.length === 0) {
+      container.innerHTML = "<p class='text-center text-gray-500'>Ingen kunder fundet</p>";
+      return;
+    }
+
+    filtered.forEach((cust, index) => {
+      const div = document.createElement("div");
+      div.className = "bg-white shadow p-4 rounded border";
+      div.innerHTML = `
+        <input type="text" value="${cust.name}" class="cust-name border p-1 rounded w-full mb-2" />
+        <input type="text" value="${cust.address || ''}" class="cust-address border p-1 rounded w-full mb-2" />
+        <input type="email" value="${cust.email || ''}" class="cust-email border p-1 rounded w-full mb-2" />
+        <input type="tel" value="${cust.phone || ''}" class="cust-phone border p-1 rounded w-full mb-2" />
+        <input type="password" placeholder="Skift kodeord" class="cust-pass border p-1 rounded w-full mb-2" />
+        <div class="flex gap-2 mt-2">
+          <button class="save-btn bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded">Gem</button>
+          <button class="delete-btn bg-red-600 hover:bg-red-700 text-white px-3 py-1 rounded">Slet</button>
+        </div>
+      `;
+
+      div.querySelector(".save-btn").onclick = () => {
+        cust.name = div.querySelector(".cust-name").value.trim();
+        cust.address = div.querySelector(".cust-address").value.trim();
+        cust.email = div.querySelector(".cust-email").value.trim();
+        cust.phone = div.querySelector(".cust-phone").value.trim();
+        const newPass = div.querySelector(".cust-pass").value.trim();
+        if (newPass) cust.password = newPass;
+        localStorage.setItem("customers", JSON.stringify(customers));
+        alert("Kunde opdateret");
+      };
+
+      div.querySelector(".delete-btn").onclick = () => {
+        if (confirm("Er du sikker på at du vil slette denne kunde?")) {
+          customers.splice(index, 1);
+          localStorage.setItem("customers", JSON.stringify(customers));
+          renderCustomerList();
+        }
+      };
+
+      container.appendChild(div);
+    });
+  }
+
   document.getElementById("add-customer-btn").addEventListener("click", addNewCustomer);
+  document.getElementById("customer-search").addEventListener("input", e => {
+    renderCustomerList(e.target.value);
+  });
 </script>
 
     <!-- Produkter -->
