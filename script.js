@@ -152,3 +152,41 @@ function renderProductAdmin() {
 
 // === Init ===
 showSection("login");
+// === Ordrer med status ===
+function renderOrderList() {
+  const list = document.getElementById("order-list");
+  list.innerHTML = "";
+
+  if (!orders.length) {
+    list.innerHTML = "<p class='text-center text-gray-500'>Ingen ordrer endnu</p>";
+    return;
+  }
+
+  const sorted = [...orders].sort((a, b) => new Date(b.dato) - new Date(a.dato));
+
+  sorted.forEach((order, index) => {
+    const card = document.createElement("div");
+    card.className = "bg-white shadow p-4 mb-4 rounded border";
+    card.innerHTML = `
+      <h4 class="text-lg font-bold text-green-700">${order.kunde}</h4>
+      <p><strong>Dato:</strong> ${order.dato}</p>
+      <p><strong>Status:</strong> 
+        <select class="order-status border p-1 rounded">
+          <option value="Modtaget" ${order.status === "Modtaget" ? "selected" : ""}>Modtaget</option>
+          <option value="Behandles" ${order.status === "Behandles" ? "selected" : ""}>Behandles</option>
+          <option value="Leveret" ${order.status === "Leveret" ? "selected" : ""}>Leveret</option>
+        </select>
+      </p>
+      <p><strong>Produkter:</strong> ${order.produkter?.join(", ") || "-"}</p>
+      ${order.kommentar ? `<p><strong>Kommentar:</strong> ${order.kommentar}</p>` : ""}
+    `;
+
+    card.querySelector(".order-status").onchange = (e) => {
+      order.status = e.target.value;
+      localStorage.setItem("orders", JSON.stringify(orders));
+      alert("Status opdateret");
+    };
+
+    list.appendChild(card);
+  });
+}
