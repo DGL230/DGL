@@ -67,8 +67,8 @@ function saveCustomerInfo(username) {
   }
 }
 
-// === OPRET KUNDE (retter name -> username) ===
-document.addEventListener("click", function(e) {
+// === OPRET KUNDE ===
+document.addEventListener("click", function (e) {
   if (e.target && e.target.id === "add-customer-btn") {
     const username = document.getElementById("new-cust-name").value.trim();
     const pass = document.getElementById("new-cust-pass").value.trim();
@@ -91,8 +91,3 @@ document.addEventListener("click", function(e) {
     alert("Kunde tilføjet");
   }
 });
-
-
-    alert("Kunde tilføjet");
-  };
-}
