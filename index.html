@@ -1,93 +1,80 @@
 <!DOCTYPE html>
 <html lang="da">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>D.G.L Admin App</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <!-- LOGIN -->
+  <!-- Logo -->
+  <div class="logo-container">
+    <img src="https://primary.jwwb.nl/public/p/l/e/temp-rpbhmtxlqyrsizfthpaq/image-high.png?enable-io=true&enable=upscale&width=290" alt="DGL Logo">
+  </div>
+
+  <!-- Login -->
   <section id="login-section">
     <h1>Log ind</h1>
-    <input type="text" id="username" placeholder="Brugernavn">
-    <input type="password" id="password" placeholder="Adgangskode">
+    <input type="text" id="username" placeholder="Brugernavn" />
+    <input type="password" id="password" placeholder="Adgangskode" />
     <button id="login-btn">Log ind</button>
     <p id="login-error" class="error"></p>
   </section>
 
-  <!-- ADMIN SECTION -->
+  <!-- Admin Sektion -->
   <section id="admin-section" style="display: none;">
     <div class="admin-header">
       <h2>D.G.L Adminpanel</h2>
       <button id="logout-admin" class="logout-btn">Log ud</button>
     </div>
 
-    <!-- Admin Dashboard -->
+    <!-- Dashboard: 5 bokse i 2x2 grid -->
     <div id="admin-dashboard" class="admin-grid">
       <div class="admin-box" id="admin-goto-orders">1. Ordrer</div>
       <div class="admin-box" id="admin-goto-customers">2. Kunder</div>
       <div class="admin-box" id="admin-goto-products">3. Produkter</div>
       <div class="admin-box" id="admin-goto-contact">4. Kontakt info</div>
+      <div class="admin-box" id="admin-goto-admins">5. Admins</div>
     </div>
 
-    <!-- Ordrer -->
-    <div id="admin-orders" style="display: none;">
+    <!-- Undersider -->
+    <div id="admin-orders" style="display:none;">
       <h3>Ordrer</h3>
       <div id="order-list"></div>
       <button onclick="goToDashboard()">Tilbage</button>
     </div>
 
-    <!-- Kunder -->
-    <div id="admin-customers" style="display: none;">
+    <div id="admin-customers" style="display:none;">
       <h3>Kunder</h3>
-      <input type="text" id="cust-name" placeholder="Kundenavn">
-      <input type="password" id="cust-pass" placeholder="Kodeord">
-      <input type="text" id="cust-address" placeholder="Adresse">
-      <input type="text" id="cust-cvr" placeholder="CVR-nummer">
-      <input type="email" id="cust-email" placeholder="Email">
-      <input type="tel" id="cust-phone" placeholder="Telefonnummer">
-      <label><input type="checkbox" id="cust-allow-sms"> Må modtage SMS</label>
-      <label><input type="checkbox" id="cust-allow-mail"> Må modtage e-mail</label>
-      <div id="delivery-days">
-        <label><input type="checkbox" value="1"> Man</label>
-        <label><input type="checkbox" value="2"> Tir</label>
-        <label><input type="checkbox" value="3"> Ons</label>
-        <label><input type="checkbox" value="4"> Tor</label>
-        <label><input type="checkbox" value="5"> Fre</label>
-        <label><input type="checkbox" value="6"> Lør</label>
-        <label><input type="checkbox" value="0"> Søn</label>
-      </div>
-      <button id="save-customer">Gem kunde</button>
-      <ul id="customer-list"></ul>
+      <div id="customer-list"></div>
       <button onclick="goToDashboard()">Tilbage</button>
     </div>
 
-    <!-- Produkter -->
-    <div id="admin-products" style="display: none;">
+    <div id="admin-products" style="display:none;">
       <h3>Produkter</h3>
-      <input type="text" id="product-name" placeholder="Produktnavn">
-      <input type="text" id="product-category" placeholder="Kategori">
-      <input type="file" id="product-image" accept="image/*">
-      <button id="add-product">Tilføj produkt</button>
-      <ul id="product-admin-list"></ul>
+      <div id="product-admin-list"></div>
       <button onclick="goToDashboard()">Tilbage</button>
     </div>
 
-    <!-- Kontaktinfo -->
-    <div id="admin-contact-editor" style="display: none;">
-      <h3>Rediger kontaktoplysninger</h3>
-      <input type="text" id="contact-name" placeholder="Firmanavn">
-      <input type="email" id="contact-email" placeholder="Email">
-      <input type="tel" id="contact-phone" placeholder="Telefonnummer">
-      <input type="text" id="contact-address" placeholder="Adresse (valgfrit)">
+    <div id="admin-contact-editor" style="display:none;">
+      <h3>Kontakt Info</h3>
+      <input type="text" id="contact-name" placeholder="Firmanavn" />
+      <input type="email" id="contact-email" placeholder="Email" />
+      <input type="tel" id="contact-phone" placeholder="Telefonnummer" />
+      <input type="text" id="contact-address" placeholder="Adresse (valgfrit)" />
       <button id="save-contact">Gem kontaktinfo</button>
       <button onclick="goToDashboard()">Tilbage</button>
     </div>
-  </section>
 
-  <!-- Kunde-sektion og kontakt-sektion kan komme her senere -->
+    <div id="admin-manage-admins" style="display:none;">
+      <h3>Admins</h3>
+      <input type="text" id="new-admin-username" placeholder="Nyt admin brugernavn" />
+      <input type="password" id="new-admin-password" placeholder="Kodeord" />
+      <button id="add-admin-btn">Tilføj admin</button>
+      <ul id="admin-list"></ul>
+      <button onclick="goToDashboard()">Tilbage</button>
+    </div>
+  </section>
 
   <script src="script.js"></script>
 </body>
