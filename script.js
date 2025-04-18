@@ -39,9 +39,13 @@ function showSection(id) {
 }
 
 function showOnlyAdminSection(id) {
-  ["admin-dashboard", "admin-orders", "admin-customers", "admin-products", "admin-contact-editor"]
-    .forEach(sec => document.getElementById(sec).style.display = "none");
-  document.getElementById(id).style.display = "block";
+  ["admin-dashboard", "admin-orders", "admin-customers", "admin-products", "admin-contact-editor", "admin-manage-admins"]
+    .forEach(sec => {
+      const section = document.getElementById(sec);
+      if (section) section.style.display = "none";
+    });
+  const active = document.getElementById(id);
+  if (active) active.style.display = "block";
 }
 
 function goToDashboard() {
@@ -67,6 +71,11 @@ document.getElementById("admin-goto-products").onclick = () => {
 document.getElementById("admin-goto-contact").onclick = () => {
   showOnlyAdminSection("admin-contact-editor");
   loadContactEditor();
+};
+
+document.getElementById("admin-goto-admins").onclick = () => {
+  showOnlyAdminSection("admin-manage-admins");
+  renderAdminList();
 };
 
 // === Kontaktinfo ===
@@ -95,6 +104,38 @@ function loadContactEditor() {
   contactPhone.value = info.phone || "";
   contactAddress.value = info.address || "";
 }
+
+// === Admin Management ===
+function renderAdminList() {
+  const list = document.getElementById("admin-list");
+  list.innerHTML = "";
+  admins.forEach((admin, index) => {
+    const li = document.createElement("li");
+    li.textContent = admin.username;
+    if (admin.username !== "admin") {
+      const btn = document.createElement("button");
+      btn.textContent = "Slet";
+      btn.onclick = () => {
+        admins.splice(index, 1);
+        localStorage.setItem("admins", JSON.stringify(admins));
+        renderAdminList();
+      };
+      li.appendChild(btn);
+    }
+    list.appendChild(li);
+  });
+}
+
+document.getElementById("add-admin-btn").onclick = () => {
+  const user = document.getElementById("new-admin-username").value.trim();
+  const pass = document.getElementById("new-admin-password").value.trim();
+  if (!user || !pass) return alert("Udfyld begge felter");
+  admins.push({ username: user, password: pass });
+  localStorage.setItem("admins", JSON.stringify(admins));
+  renderAdminList();
+  document.getElementById("new-admin-username").value = "";
+  document.getElementById("new-admin-password").value = "";
+};
 
 // === Placeholder funktioner ===
 function renderOrderList() {
