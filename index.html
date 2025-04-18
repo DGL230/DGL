@@ -4,75 +4,75 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>D.G.L Admin App</title>
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-gray-100">
   <!-- Logo -->
-  <div class="logo-container">
-    <img src="https://primary.jwwb.nl/public/p/l/e/temp-rpbhmtxlqyrsizfthpaq/image-high.png?enable-io=true&enable=upscale&width=290" alt="DGL Logo">
+  <div class="text-center mt-6">
+    <img class="mx-auto h-20" src="https://primary.jwwb.nl/public/p/l/e/temp-rpbhmtxlqyrsizfthpaq/image-high.png?enable-io=true&enable=upscale&width=290" alt="DGL Logo">
   </div>
 
   <!-- Login -->
-  <section id="login-section">
-    <h1>Log ind</h1>
-    <input type="text" id="username" placeholder="Brugernavn" />
-    <input type="password" id="password" placeholder="Adgangskode" />
-    <button id="login-btn">Log ind</button>
-    <p id="login-error" class="error"></p>
+  <section id="login-section" class="max-w-md mx-auto mt-10 bg-white p-6 rounded shadow">
+    <h1 class="text-2xl font-bold text-green-700 text-center mb-4">Log ind</h1>
+    <input type="text" id="username" placeholder="Brugernavn" class="border rounded p-2 w-full mb-3" />
+    <input type="password" id="password" placeholder="Adgangskode" class="border rounded p-2 w-full mb-3" />
+    <button id="login-btn" class="bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded w-full">Log ind</button>
+    <p id="login-error" class="text-red-600 text-center mt-2"></p>
   </section>
 
   <!-- Admin Sektion -->
   <section id="admin-section" style="display: none;">
-    <div class="admin-header">
-      <h2>D.G.L Adminpanel</h2>
-      <button id="logout-admin" class="logout-btn">Log ud</button>
+    <div class="bg-green-700 text-white flex justify-between items-center px-6 py-3">
+      <h2 class="text-xl font-bold">D.G.L Adminpanel</h2>
+      <button id="logout-admin" class="bg-red-600 px-4 py-2 rounded">Log ud</button>
     </div>
 
-    <!-- Dashboard: 5 bokse i 2x2 grid -->
-    <div id="admin-dashboard" class="admin-grid">
-      <div class="admin-box" id="admin-goto-orders">1. Ordrer</div>
-      <div class="admin-box" id="admin-goto-customers">2. Kunder</div>
-      <div class="admin-box" id="admin-goto-products">3. Produkter</div>
-      <div class="admin-box" id="admin-goto-contact">4. Kontakt info</div>
-      <div class="admin-box" id="admin-goto-admins">5. Admins</div>
+    <!-- Dashboard: 5 bokse i grid -->
+    <div id="admin-dashboard" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 p-6">
+      <div class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50" id="admin-goto-orders">1. Ordrer</div>
+      <div class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50" id="admin-goto-customers">2. Kunder</div>
+      <div class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50" id="admin-goto-products">3. Produkter</div>
+      <div class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50" id="admin-goto-contact">4. Kontakt info</div>
+      <div class="bg-white border border-green-700 text-green-700 font-semibold text-center p-6 rounded shadow cursor-pointer hover:bg-green-50" id="admin-goto-admins">5. Admins</div>
     </div>
 
     <!-- Undersider -->
-    <div id="admin-orders" style="display:none;">
-      <h3>Ordrer</h3>
+    <div id="admin-orders" class="p-6" style="display:none;">
+      <h3 class="text-xl font-bold mb-4">Ordrer</h3>
       <div id="order-list"></div>
-      <button onclick="goToDashboard()">Tilbage</button>
+      <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
     </div>
 
-    <div id="admin-customers" style="display:none;">
-      <h3>Kunder</h3>
+    <div id="admin-customers" class="p-6" style="display:none;">
+      <h3 class="text-xl font-bold mb-4">Kunder</h3>
       <div id="customer-list"></div>
-      <button onclick="goToDashboard()">Tilbage</button>
+      <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
     </div>
 
-    <div id="admin-products" style="display:none;">
-      <h3>Produkter</h3>
+    <div id="admin-products" class="p-6" style="display:none;">
+      <h3 class="text-xl font-bold mb-4">Produkter</h3>
       <div id="product-admin-list"></div>
-      <button onclick="goToDashboard()">Tilbage</button>
+      <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded">Tilbage</button>
     </div>
 
-    <div id="admin-contact-editor" style="display:none;">
-      <h3>Kontakt Info</h3>
-      <input type="text" id="contact-name" placeholder="Firmanavn" />
-      <input type="email" id="contact-email" placeholder="Email" />
-      <input type="tel" id="contact-phone" placeholder="Telefonnummer" />
-      <input type="text" id="contact-address" placeholder="Adresse (valgfrit)" />
-      <button id="save-contact">Gem kontaktinfo</button>
-      <button onclick="goToDashboard()">Tilbage</button>
+    <div id="admin-contact-editor" class="p-6" style="display:none;">
+      <h3 class="text-xl font-bold mb-4">Kontakt Info</h3>
+      <input type="text" id="contact-name" placeholder="Firmanavn" class="border rounded p-2 w-full mb-3" />
+      <input type="email" id="contact-email" placeholder="Email" class="border rounded p-2 w-full mb-3" />
+      <input type="tel" id="contact-phone" placeholder="Telefonnummer" class="border rounded p-2 w-full mb-3" />
+      <input type="text" id="contact-address" placeholder="Adresse (valgfrit)" class="border rounded p-2 w-full mb-3" />
+      <button id="save-contact" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Gem kontaktinfo</button>
+      <button onclick="goToDashboard()" class="mt-4 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded w-full">Tilbage</button>
     </div>
 
-    <div id="admin-manage-admins" style="display:none;">
-      <h3>Admins</h3>
-      <input type="text" id="new-admin-username" placeholder="Nyt admin brugernavn" />
-      <input type="password" id="new-admin-password" placeholder="Kodeord" />
-      <button id="add-admin-btn">Tilføj admin</button>
-      <ul id="admin-list"></ul>
-      <button onclick="goToDashboard()">Tilbage</button>
+    <div id="admin-manage-admins" class="p-6" style="display:none;">
+      <h3 class="text-xl font-bold mb-4">Admins</h3>
+      <input type="text" id="new-admin-username" placeholder="Nyt admin brugernavn" class="border rounded p-2 w-full mb-3" />
+      <input type="password" id="new-admin-password" placeholder="Kodeord" class="border rounded p-2 w-full mb-3" />
+      <button id="add-admin-btn" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded w-full">Tilføj admin</button>
+      <ul id="admin-list" class="mt-4 space-y-2"></ul>
+      <button onclick="goToDashboard()" class="mt-6 bg-gray-400 hover:bg-gray-500 text-white px-4 py-2 rounded w-full">Tilbage</button>
     </div>
   </section>
 
